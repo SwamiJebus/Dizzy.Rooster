@@ -1,37 +1,33 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
-#include <Wire.h>
+#include <SPI.h>
 
 ///////////////////////
 //    Pin defines    //
 ///////////////////////
 
-int PinSDA = 26;
-int PinSCL = 27;
+int OLED_CLK  = 34;
+int OLED_MOSI = 35;
+int OLED_RES  = 32;
+int OLED_DC   = 33;
+int OLED_CS   = 25;
 
 ////////////////////////
 //    Constructors    //
 ////////////////////////
 
-TwoWire I2C = TwoWire(0);
-U8G2_SH1106_128X64_NONAME_F_HW_I2C Display = U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, 0, PinSCL, PinSDA);
-
-// put function declarations here:
-int myFunction(int, int);
+U8G2_SH1106_128X64_NONAME_F_4W_HW_SPI Display(U8G2_R0, OLED_CS, OLED_DC, OLED_RES);
 
 void setup() 
 {
-  I2C.begin(PinSDA, PinSCL, 400000); // ESP32 supports "fast-mode" of between 100-400 kHz
   Display.begin();
 }
 
-void loop() 
-{
+void loop() {
   Display.firstPage();
-  do 
-  {
+  do {
     Display.setFont(u8g2_font_ncenB14_tr);
     Display.drawStr(0,20,"Hello World!");
-  }
-  while (Display.nextPage()); 
+  } while ( Display.nextPage() );
+  delay(1000);
 }
