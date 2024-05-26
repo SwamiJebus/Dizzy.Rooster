@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
 #include <SPI.h>
+#include <WiFi.h>
 
 ///////////////////////
 //    Pin Mapping    //
@@ -22,6 +23,8 @@ int Joystick_Y  = 26;
 int InputX_Raw = 0; // Analog values range from 0-4095
 int InputY_Raw = 0;
 
+uint8_t RXAddress[] = {0xD0, 0xEF, 0x76, 0x47, 0x60, 0x98}; // TODO Maybe don't hardcode this
+
 ////////////////////////
 //    Constructors    //
 ////////////////////////
@@ -30,8 +33,12 @@ U8G2_SH1106_128X64_NONAME_F_4W_HW_SPI Display(U8G2_R0, OLED_CS, OLED_DC, OLED_RE
 
 void setup() 
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
+  WiFi.mode(WIFI_MODE_STA);
+  
+  delay(1000);
 
+  Serial.println(WiFi.macAddress());
   Display.begin();
 }
 
