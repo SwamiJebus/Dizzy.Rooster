@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <U8g2lib.h>
 #include <SPI.h>
 #include <WiFi.h>
 
@@ -29,7 +28,6 @@ uint8_t RXAddress[] = {0xD0, 0xEF, 0x76, 0x47, 0x60, 0x98}; // TODO Maybe don't 
 //    Constructors    //
 ////////////////////////
 
-U8G2_SH1106_128X64_NONAME_F_4W_HW_SPI Display(U8G2_R0, OLED_CS, OLED_DC, OLED_RES);
 
 void setup() 
 {
@@ -39,15 +37,9 @@ void setup()
   delay(1000);
 
   Serial.println(WiFi.macAddress());
-  Display.begin();
 }
 
 void loop() {
-  // Display.firstPage();
-  // do {
-  //   Display.setFont(u8g2_font_ncenB14_tr);
-  //   Display.drawStr(0,20,"Hello World!");
-  // } while ( Display.nextPage() );
 
   InputX_Raw = analogRead(Joystick_X);
   InputY_Raw = analogRead(Joystick_Y);
