@@ -53,8 +53,12 @@ void setup()
 
   if(!Display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
+    for(;;); // Don't proceed, loop forever.
   }
+
+  // Initialize text settings.
+  Display.setTextSize(1);               // Normal 1:1 pixel scale.
+  Display.setTextColor(SSD1306_WHITE);  // Draw white text.
 
   // Display Rooster logo.
   Display.clearDisplay();
@@ -70,6 +74,22 @@ void setup()
 
 }
 
+void DisplayInputs()
+{
+  Display.clearDisplay();
+
+  Display.setTextSize(1);             // Normal 1:1 pixel scale
+  Display.setTextColor(SSD1306_WHITE);        // Draw white text
+  Display.setCursor(0,0);             // Start at top-left corner
+
+  Display.print(F("X Input: "));
+  Display.println(InputX_Raw);
+  Display.print(F("Y Input: "));
+  Display.println(InputY_Raw);
+
+  Display.display();
+}
+
 ///////////////////
 //    LOOP       //
 ///////////////////
@@ -78,11 +98,9 @@ void loop() {
 
   InputX_Raw = analogRead(Joystick_X);
   InputY_Raw = analogRead(Joystick_Y);
-
-  Serial.print("x = ");
-  Serial.print(InputX_Raw);
-  Serial.print(", y = ");
-  Serial.println(InputY_Raw);
+  
+  // TODO: Take advantage of frame buffer.
+  DisplayInputs();
 
   delay(100);
 }
