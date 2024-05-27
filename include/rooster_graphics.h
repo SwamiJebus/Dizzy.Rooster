@@ -1,4 +1,5 @@
 #ifndef ROOSTER_GRAPHICS_H
+#define ROOSTER_GRAPHICS_H
 
 #define RoosterLogo_Width   128
 #define RoosterLogo_Height  64
