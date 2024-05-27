@@ -24,7 +24,7 @@ int InputY_Raw = 0;
 String TransmitHealth;
 
 // Hold telemetry values
-int PeerStatus;
+int PeerStatus = 0;
 
 ///////////////////
 //    Defines    //
@@ -39,8 +39,8 @@ int PeerStatus;
 #define OLED_RESET      -1 
 #define SCREEN_ADDRESS  0x3D
 
-uint8_t TXAddress[] = {0x34, 0x85, 0x18, 0x03, 0x9b, 0x84}; // TODO Maybe don't hardcode this
-uint8_t RXAddress[] = {0x32, 0x82, 0x12, 0x01, 0x9b, 0x81}; // TODO Maybe don't hardcode this
+uint8_t SelfAddress[] = {0x34, 0x85, 0x18, 0x03, 0x9b, 0x84}; // TODO Maybe don't hardcode this
+uint8_t RemoteAddress[] = {0xA0, 0x76, 0x4E, 0x40, 0x2E, 0x14}; // TODO Maybe don't hardcode this
 
 ////////////////////////
 //    Constructors    //
@@ -128,7 +128,7 @@ void setup()
   esp_now_register_recv_cb(OnDataRecv);
 
   // Register peer
-  memcpy(PeerInfo.peer_addr, RXAddress, 6);
+  memcpy(PeerInfo.peer_addr, RemoteAddress, 6);
   PeerInfo.channel = 0;
   PeerInfo.encrypt = false;
 
@@ -167,7 +167,7 @@ void loop() {
   InputY_Raw = analogRead(Joystick_Y);
 
   BuildCommandPacket();
-  esp_err_t result = esp_now_send(RXAddress, (uint8_t *) &CommandPacket, sizeof(CommandPacket)); 
+  esp_err_t result = esp_now_send(RemoteAddress, (uint8_t *) &CommandPacket, sizeof(CommandPacket)); 
 
   // TODO: Take advantage of frame buffer.
   DisplayMain();
