@@ -1,19 +1,15 @@
 #include <Arduino.h>
-#include <SPI.h>
 #include <WiFi.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include "rooster_graphics.h"
 
 ///////////////////////
 //    Pin Mapping    //
 ///////////////////////
 
-int OLED_CLK  = 34;
-int OLED_MOSI = 35;
-int OLED_RES  = 32;
-int OLED_DC   = 33;
-int OLED_CS   = 25;
-
-int Joystick_X  = 27;
-int Joystick_Y  = 26;
+int Joystick_X  = D2;
+int Joystick_Y  = D1;
 
 /////////////////////
 //    Variables    //
@@ -22,22 +18,61 @@ int Joystick_Y  = 26;
 int InputX_Raw = 0; // Analog values range from 0-4095
 int InputY_Raw = 0;
 
-uint8_t RXAddress[] = {0xD0, 0xEF, 0x76, 0x47, 0x60, 0x98}; // TODO Maybe don't hardcode this
+///////////////////
+//    Defines    //
+///////////////////
+
+#define LOGO_HEIGHT   16
+#define LOGO_WIDTH    16
+
+#define SCREEN_WIDTH    128   // OLED display width, in pixels
+#define SCREEN_HEIGHT   64    // OLED display height, in pixels
+
+#define OLED_RESET      -1 
+#define SCREEN_ADDRESS  0x3D
+
+uint8_t RXAddress[] = {0x34, 0x85, 0x18, 0x03, 0x9b, 0x84}; // TODO Maybe don't hardcode this
 
 ////////////////////////
 //    Constructors    //
 ////////////////////////
 
+Adafruit_SSD1306 Display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+///////////////////
+//    SETUP      //
+///////////////////
 
 void setup() 
 {
   Serial.begin(115200);
   WiFi.mode(WIFI_MODE_STA);
   
+  pinMode(Joystick_X, INPUT);
+  pinMode(Joystick_Y, INPUT);
+
+  if(!Display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+
+  // Display Rooster logo.
+  Display.clearDisplay();
+  Display.drawBitmap(
+    0,
+    0,
+    RoosterLogo, 
+    Display.width(), 
+    Display.height(), 
+    1);
+  Display.display();
   delay(1000);
 
-  Serial.println(WiFi.macAddress());
 }
+
+///////////////////
+//    LOOP       //
+///////////////////
 
 void loop() {
 
