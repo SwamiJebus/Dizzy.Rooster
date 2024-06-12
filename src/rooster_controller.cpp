@@ -10,8 +10,8 @@
 //    Pin Mapping    //
 ///////////////////////
 
-int Joystick_X  = D2;
-int Joystick_Y  = D1;
+int Joystick_X  = GPIO_NUM_32;
+int Joystick_Y  = GPIO_NUM_35;
 
 /////////////////////
 //    Variables    //
