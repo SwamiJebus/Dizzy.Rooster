@@ -14,6 +14,13 @@ int Joystick_X  = GPIO_NUM_32;
 int Joystick_Y  = GPIO_NUM_35;
 
 /////////////////////
+//    Constants    //
+/////////////////////
+
+const int XCenterOffset = 0;
+const int YCenterOffset = 152;
+
+/////////////////////
 //    Variables    //
 /////////////////////
 
@@ -83,9 +90,9 @@ void DisplayMain()
   Display.setCursor(0,0);             // Start at top-left corner
 
   Display.print(F("X Input: "));
-  Display.println(InputX_Raw);
+  Display.println(InputX_Raw+XCenterOffset);
   Display.print(F("Y Input: "));
-  Display.println(InputY_Raw);
+  Display.println(InputY_Raw+YCenterOffset);
   Display.print(F("Transmit: "));
   Display.println(TransmitHealth);
   Display.print(F("Peer Status: "));
@@ -96,8 +103,8 @@ void DisplayMain()
 
 void BuildCommandPacket()
 {
-  CommandPacket.Ch1 = InputX_Raw;
-  CommandPacket.Ch2 = InputY_Raw;
+  CommandPacket.Ch1 = InputX_Raw+XCenterOffset;
+  CommandPacket.Ch2 = InputY_Raw+YCenterOffset;
   CommandPacket.Status = 1; // TODO: Set up some flags to display transmitter health.
 };
 
@@ -172,5 +179,5 @@ void loop() {
   // TODO: Take advantage of frame buffer.
   DisplayMain();
 
-  delay(100);
+  delay(50);
 }
