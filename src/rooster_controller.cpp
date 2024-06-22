@@ -178,6 +178,4 @@ void loop() {
 
   // TODO: Take advantage of frame buffer.
   DisplayMain();
-
-  delay(50);
 }
